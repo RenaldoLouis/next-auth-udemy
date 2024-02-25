@@ -11,7 +11,12 @@ export async function GET(request) {
             return NextResponse.json({ message: "You are not authorized to get this data" }, { status: 401 });
         }
 
-        const posts = await prisma.post.findMany();
+        const userId = decoded.id; // Assuming the user_id is stored in the JWT payload
+        const posts = await prisma.post.findMany({
+            where: {
+                user_id: userId // Filter posts based on the authenticated user's user_id
+            }
+        });
         return NextResponse.json({ posts }, { status: 200 });
     }
     catch (e) {
