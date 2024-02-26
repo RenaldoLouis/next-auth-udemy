@@ -1,7 +1,7 @@
 import prisma from "@/helpers/prisma";
 import { NextResponse } from "next/server";
 import * as bcrypt from 'bcrypt';
-// import { sendVerificationMail } from "../helpers/mailer";
+import { sendVerificationMail } from "../helpers/mailer";
 
 const generateRandomCode = () => {
     const min = 100000;
@@ -26,14 +26,14 @@ export async function POST(request) {
             }
         })
 
-        // await prisma.verificationCode.create({
-        //     data: {
-        //         code,
-        //         user_id: user.id
-        //     }
-        // })
+        await prisma.verificationCode.create({
+            data: {
+                code,
+                user_id: user.id
+            }
+        })
 
-        // await sendVerificationMail(email, code);
+        await sendVerificationMail(email, code);
 
         const { password: hashedPasswrod, ...result } = user;
         return NextResponse.json({ result }, { status: 201 });
